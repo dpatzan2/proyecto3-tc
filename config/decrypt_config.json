@@ -1,0 +1,48 @@
+{
+  "description": "Configuración de Máquina de Turing para Decriptación César",
+  "states": [
+    "q_init",
+    "q_read_key",
+    "q_find_separator",
+    "q_process_char",
+    "q_shift_char_back",
+    "q_write_result",
+    "q_next_char",
+    "q_accept"
+  ],
+  "input_alphabet": [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " "
+  ],
+  "tape_alphabet": [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "_", "|", "X"
+  ],
+  "initial_state": "q_init",
+  "accept_states": ["q_accept"],
+  "blank_symbol": "_",
+  "transitions": [
+    {
+      "description": "Ejemplo de transición: desde estado inicial, leer primer símbolo",
+      "current_state": "q_init",
+      "read_symbol": "3",
+      "next_state": "q_read_key",
+      "write_symbol": "3",
+      "direction": "R"
+    },
+    {
+      "description": "Las transiciones completas se generan dinámicamente según la llave",
+      "note": "Este archivo es un ejemplo de estructura. En la implementación real,",
+      "note2": "las transiciones se generan programáticamente para cada combinación",
+      "note3": "de estado y símbolo, aplicando el desplazamiento César inverso."
+    }
+  ],
+  "notes": [
+    "Esta MT implementa el descifrado César: D(x) = (x - k) mod 26",
+    "El alfabeto usado es A-Z (26 letras), los espacios se representan como #",
+    "La llave 'k' se lee del inicio de la cinta antes del separador #",
+    "Cada carácter se procesa individualmente aplicando el desplazamiento inverso"
+  ]
+}
