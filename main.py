@@ -7,8 +7,9 @@ Fecha: Noviembre 2025
 """
 
 import sys
-from src.caesar_encrypt import create_encrypt_machine
-from src.caesar_decrypt import create_decrypt_machine
+from src.turing_machine import TuringMachine
+#from src.caesar_encrypt import create_encrypt_machine
+#from src.caesar_decrypt import create_decrypt_machine
 
 
 def print_banner():
@@ -45,8 +46,13 @@ def encrypt_message():
         print("ERROR: Formato inválido. Debe incluir llave y mensaje separados por '#'")
         return
     
-    machine = create_encrypt_machine()
-    encrypted = machine.encrypt(input_string, verbose=True)
+    machine = TuringMachine()
+    machine.load_config("config/encrypt_config.json")
+    accepted, encrypted = machine.run(input_string.strip().upper())
+    if not accepted:
+        print(f"ERROR: La cadena no fue aceptada por la máquina. Revisa quel formato sea llave#mensaje y que la llave este en el rango correcto: {encrypted}")
+        print()
+        return
     
     print(f"\n✓ Mensaje encriptado: {encrypted}")
     print()
@@ -65,8 +71,13 @@ def decrypt_message():
         print("ERROR: Formato inválido. Debe incluir llave y mensaje separados por '#'")
         return
     
-    machine = create_decrypt_machine()
-    decrypted = machine.decrypt(input_string, verbose=True)
+    machine = TuringMachine()
+    machine.load_config("config/decrypt_config.json")
+    accepted, decrypted = machine.run(input_string.strip().upper())
+    if not accepted:
+        print(f"ERROR: La cadena no fue aceptada por la máquina. Revisa quel formato sea llave#mensaje y que la llave este en el rango correcto: {decrypted}")
+        print()
+        return
     
     print(f"\n✓ Mensaje decriptado: {decrypted}")
     print()
@@ -82,8 +93,9 @@ def run_project_examples():
     print("\n--- EJEMPLO 1: Encriptación con llave numérica ---")
     print("Entrada: 3#ROMA NO FUE CONSTRUIDA EN UN DIA")
     
-    encrypt_machine = create_encrypt_machine()
-    encrypted = encrypt_machine.encrypt("3#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
+    encrypt_machine = TuringMachine()
+    encrypt_machine.load_config("config/encrypt_config.json")
+    _, encrypted = encrypt_machine.run("3#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
     
     print(f"Salida esperada: URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     print(f"Salida obtenida: {encrypted}")
@@ -93,7 +105,7 @@ def run_project_examples():
     print("\n--- EJEMPLO 2: Encriptación con llave alfabética ---")
     print("Entrada: D#ROMA NO FUE CONSTRUIDA EN UN DIA")
     
-    encrypted2 = encrypt_machine.encrypt("D#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
+    _, encrypted2 = encrypt_machine.run("D#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
     
     print(f"Salida esperada: URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     print(f"Salida obtenida: {encrypted2}")
@@ -103,8 +115,9 @@ def run_project_examples():
     print("\n--- EJEMPLO 3: Decriptación con llave numérica ---")
     print("Entrada: 3#URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     
-    decrypt_machine = create_decrypt_machine()
-    decrypted = decrypt_machine.decrypt("3#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
+    decrypt_machine = TuringMachine()
+    decrypt_machine.load_config("config/decrypt_config.json")
+    _, decrypted = decrypt_machine.run("3#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
     
     print(f"Salida esperada: ROMA NO FUE CONSTRUIDA EN UN DIA")
     print(f"Salida obtenida: {decrypted}")
@@ -114,7 +127,7 @@ def run_project_examples():
     print("\n--- EJEMPLO 4: Decriptación con llave alfabética ---")
     print("Entrada: D#URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     
-    decrypted2 = decrypt_machine.decrypt("D#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
+    _, decrypted2 = decrypt_machine.run("D#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
     
     print(f"Salida esperada: ROMA NO FUE CONSTRUIDA EN UN DIA")
     print(f"Salida obtenida: {decrypted2}")
@@ -129,8 +142,10 @@ def run_additional_tests():
     print("  PRUEBAS ADICIONALES")
     print("=" * 70)
     
-    encrypt_machine = create_encrypt_machine()
-    decrypt_machine = create_decrypt_machine()
+    encrypt_machine = TuringMachine()
+    encrypt_machine.load_config("config/encrypt_config.json")
+    decrypt_machine = TuringMachine()
+    decrypt_machine.load_config("config/decrypt_config.json")
     
     test_cases = [
         ("1#HOLA MUNDO", "Mensaje simple con desplazamiento 1"),
@@ -144,13 +159,13 @@ def run_additional_tests():
         print(f"Entrada original: {test_input}")
         
         # Encriptar
-        encrypted = encrypt_machine.encrypt(test_input, verbose=False)
+        _, encrypted = encrypt_machine.run(test_input, verbose=False)
         print(f"Encriptado: {test_input.split('#')[0]}#{encrypted}")
         
         # Decriptar para verificar
         key = test_input.split('#')[0]
         to_decrypt = f"{key}#{encrypted}"
-        decrypted = decrypt_machine.decrypt(to_decrypt, verbose=False)
+        _, decrypted = decrypt_machine.run(to_decrypt, verbose=False)
         
         print(f"Decriptado: {decrypted}")
         
