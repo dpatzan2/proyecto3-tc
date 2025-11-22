@@ -48,7 +48,7 @@ def encrypt_message():
     
     machine = TuringMachine()
     machine.load_config("config/encrypt_config.json")
-    accepted, encrypted = machine.run(input_string.strip().upper())
+    accepted, encrypted = machine.run(input_string.strip().upper(), verbose=True)
     if not accepted:
         print(f"ERROR: La cadena no fue aceptada por la máquina. Revisa quel formato sea llave#mensaje y que la llave este en el rango correcto: {encrypted}")
         print()
@@ -73,7 +73,7 @@ def decrypt_message():
     
     machine = TuringMachine()
     machine.load_config("config/decrypt_config.json")
-    accepted, decrypted = machine.run(input_string.strip().upper())
+    accepted, decrypted = machine.run(input_string.strip().upper(), verbose=True)
     if not accepted:
         print(f"ERROR: La cadena no fue aceptada por la máquina. Revisa quel formato sea llave#mensaje y que la llave este en el rango correcto: {decrypted}")
         print()
@@ -95,7 +95,7 @@ def run_project_examples():
     
     encrypt_machine = TuringMachine()
     encrypt_machine.load_config("config/encrypt_config.json")
-    _, encrypted = encrypt_machine.run("3#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
+    _, encrypted = encrypt_machine.run("3#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=True)
     
     print(f"Salida esperada: URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     print(f"Salida obtenida: {encrypted}")
@@ -105,7 +105,7 @@ def run_project_examples():
     print("\n--- EJEMPLO 2: Encriptación con llave alfabética ---")
     print("Entrada: D#ROMA NO FUE CONSTRUIDA EN UN DIA")
     
-    _, encrypted2 = encrypt_machine.run("D#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=False)
+    _, encrypted2 = encrypt_machine.run("D#ROMA NO FUE CONSTRUIDA EN UN DIA", verbose=True)
     
     print(f"Salida esperada: URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     print(f"Salida obtenida: {encrypted2}")
@@ -117,7 +117,7 @@ def run_project_examples():
     
     decrypt_machine = TuringMachine()
     decrypt_machine.load_config("config/decrypt_config.json")
-    _, decrypted = decrypt_machine.run("3#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
+    _, decrypted = decrypt_machine.run("3#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=True)
     
     print(f"Salida esperada: ROMA NO FUE CONSTRUIDA EN UN DIA")
     print(f"Salida obtenida: {decrypted}")
@@ -127,7 +127,7 @@ def run_project_examples():
     print("\n--- EJEMPLO 4: Decriptación con llave alfabética ---")
     print("Entrada: D#URPD QR IXH FRQVWUXLGD HQ XQ GLD")
     
-    _, decrypted2 = decrypt_machine.run("D#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=False)
+    _, decrypted2 = decrypt_machine.run("D#URPD QR IXH FRQVWUXLGD HQ XQ GLD", verbose=True)
     
     print(f"Salida esperada: ROMA NO FUE CONSTRUIDA EN UN DIA")
     print(f"Salida obtenida: {decrypted2}")
@@ -159,13 +159,13 @@ def run_additional_tests():
         print(f"Entrada original: {test_input}")
         
         # Encriptar
-        _, encrypted = encrypt_machine.run(test_input, verbose=False)
+        _, encrypted = encrypt_machine.run(test_input, verbose=True)
         print(f"Encriptado: {test_input.split('#')[0]}#{encrypted}")
         
         # Decriptar para verificar
         key = test_input.split('#')[0]
         to_decrypt = f"{key}#{encrypted}"
-        _, decrypted = decrypt_machine.run(to_decrypt, verbose=False)
+        _, decrypted = decrypt_machine.run(to_decrypt, verbose=True)
         
         print(f"Decriptado: {decrypted}")
         
